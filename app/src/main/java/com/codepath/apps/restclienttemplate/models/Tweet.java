@@ -7,19 +7,19 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.codepath.apps.restclienttemplate.models.User.fromJson;
-
 public class Tweet {
 
     public  String body;
     public String createdAt;
     public User user;
+    public long id;
 
     public static Tweet fromJson(JSONObject jsonObject) throws JSONException {
         Tweet tweet =  new Tweet();
         tweet.body = jsonObject.getString("text");
         tweet.createdAt =  jsonObject.getString("created_at");
         tweet.user =  User.fromJson(jsonObject.getJSONObject("user"));
+        tweet.id = jsonObject.getLong("id");
         return tweet;
     }
 
