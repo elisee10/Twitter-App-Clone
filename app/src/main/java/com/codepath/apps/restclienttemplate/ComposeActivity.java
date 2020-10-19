@@ -2,10 +2,13 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +25,9 @@ public class ComposeActivity extends AppCompatActivity {
 
     public static final String TAG = "ComposeActivity";
     public static final int MAX_TWEET_LENGTH = 140;
+    public static final int TWEET_COUNT = 280;
 
+    TextView tweetcount;
     EditText etCompose;
     Button btnTweet;
     TwitterClient client;
@@ -36,8 +41,31 @@ public class ComposeActivity extends AppCompatActivity {
 
         etCompose    = findViewById(R.id.etCompose);
         btnTweet = findViewById(R.id.btnTweet);
+        tweetcount = findViewById(R.id.tweetcount);
 
 
+
+
+
+
+        tweetcount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Fires right as the text is being changed (even supplies the range of text)
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // Fires right before text is changing
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Fires right after the text has changed
+                //tvDisplay.setText(s.toString());
+            }
+        });
 
 
         //set click listener on the button

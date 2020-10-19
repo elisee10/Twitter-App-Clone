@@ -1,7 +1,6 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -38,6 +37,64 @@ public class TimelineActivity extends AppCompatActivity {
     TweetsAdapter adapter;
     SwipeRefreshLayout swipeContainer;
     EndlessRecyclerViewScrollListener scrollListener;
+
+
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_timeline);
+
+        client = TwitterApp.getRestClient(this);
+        final TweetDao tweetDao = ((TwitterApp) getApplicationContext()).getMyDatabase().tweetDao();
+
+
+        swipeContainer = findViewById(R.id.swipeContainer);
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i(TAG, "fetching new data");
+                populateHomeTimeline();
+            }
+        });
+
+
+        //Find the recycler views
+        rvTweets = findViewById(R.id.rvTweets);
+        //Init the list of tweets and adapter
+        tweets = new ArrayList<>();
+        adapter = new TweetsAdapter(this, tweets);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        //configure the recycler view: layout manager and adapter
+        rvTweets.setLayoutManager(new LinearLayoutManager(this));
+        rvTweets.setAdapter(adapter);
+
+
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Log.i(TAG, "OnLoadMore Tweets: " + page);
+                loadMoreData();
+
+            }
+        };
+
+
+        //Adds a scroll listener to the recycler view
+        rvTweets.addOnScrollListener(scrollListener);
+
+
+        populateHomeTimeline();
+    }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -77,76 +134,8 @@ public class TimelineActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timeline);
-
-        client = TwitterApp.getRestClient(this);
-        final TweetDao tweetDao = ((TwitterApp) getApplicationContext()).getMyDatabase().tweetDao();
 
 
-
-        swipeContainer = findViewById(R.id.swipeContainer);
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Log.i(TAG, "fetching new data" );
-                populateHomeTimeline();
-            }
-        });
-
-        //Find the recycler views
-        rvTweets = findViewById(R.id.rvTweets);
-        //Init the list of tweets and adapter
-        tweets =  new ArrayList<>();
-        adapter = new TweetsAdapter(this, tweets);
-        LinearLayoutManager layoutManager =  new LinearLayoutManager(this);
-        //configure the recycler view: layout manager and adapter
-        rvTweets.setLayoutManager(new LinearLayoutManager(this));
-        rvTweets.setAdapter(adapter);
-
-
-
-
-
-
-
-
-        populateHomeTimeline();
-
-        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                Log.i(TAG, "OnLoadMore Tweets: " + page);
-                loadMoreData();
-
-            }
-        };
-
-
-
-
-        //Adds a scroll listener to the recycler view
-        rvTweets.addOnScrollListener(scrollListener);
-
-        //Query for the existing tweet in the DB
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                tweetDao.recentItems();
-            }
-        });
-
-
-
-
-
-    }
 
     private void loadMoreData() {
         // 1. Send an API request to retrieve appropriate paginated data
@@ -171,12 +160,25 @@ public class TimelineActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                Log.i(TAG, "Onfailure for loadmore Data: "+  throwable);
+                Log.i(TAG, "Onfailure for loadmore Data: ",  throwable);
 
             }
         }, tweets.get(tweets.size() - 1).id);
 
     }
+
+
+
+
+        //Query for the existing tweet in the DB
+//        AsyncTask.execute(new Runnable() {
+//            @Override
+//            public void run(){
+//                tweetDao.recentItems();
+//            }
+//        });
+//    }
+
 
     private void populateHomeTimeline() {
         client.getHomeTimeline(new JsonHttpResponseHandler() {
@@ -184,7 +186,7 @@ public class TimelineActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.i(TAG, "OnSuccess! " + json.toString());
                 JSONArray jsonArray = json.jsonArray;
-                //List<Tweet> tweets =  Tweet.fromJsonArray(jsonArray);
+
                 try {
                     adapter.clear();
                     adapter.addAll(Tweet.fromJsonArray(jsonArray));
