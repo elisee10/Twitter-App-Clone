@@ -1,5 +1,6 @@
 package com.codepath.apps.restclienttemplate;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -45,16 +46,13 @@ public class ComposeActivity extends AppCompatActivity {
 
 
 
-
         tweetCount.addTextChangedListener(new TextWatcher() {
             @Override
             // Fires right as the text is being changed (even supplies the range of text)
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                tweetCount.setText(String.valueOf(start + 1));
-                if (start > TWEET_COUNT){
-                    btnTweet.setEnabled(false);
-                }
-
+                //tweetCount.setText(String.valueOf(start + 1));
+                //if (start > TWEET_COUNT){
+                   // btnTweet.setEnabled(false);
                 }
 
             @Override
@@ -63,15 +61,14 @@ public class ComposeActivity extends AppCompatActivity {
                 btnTweet.setEnabled(true);
                 // Fires right before text is changing
             }
-
+            @SuppressLint("SetTextI18n")
             @Override
             public void afterTextChanged(Editable s) {
-                tweetCount.setText(s.toString().length() + "/280");
-                tweetCount.setText(TWEET_COUNT - s.toString().length()+"");
-                if (TWEET_COUNT-s.toString().length()<0) {
+              //  tweetCount.setText(s.toString().length() + "/280");
+                tweetCount.setText(TWEET_COUNT - s.toString().length() + "");
+                if (TWEET_COUNT - s.toString().length() < 0) {
                     btnTweet.setEnabled(false);
                 }
-
             }
         });
 
