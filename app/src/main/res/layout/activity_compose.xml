@@ -29,13 +29,18 @@
         android:layout_marginEnd="5dp"
         android:text="@string/tweet" />
 
-    <TextView
-        android:id="@+id/tweetcount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="119dp"
-        android:text="TextView" />
+
+        <TextView
+            android:id="@+id/tweetcounting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/etCompose"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="119dp"
+            android:layout_marginBottom="17dp"
+            tools:text="0/280"
+            />
+
+
 </RelativeLayout>

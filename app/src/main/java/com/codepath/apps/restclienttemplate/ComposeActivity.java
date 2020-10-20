@@ -27,7 +27,7 @@ public class ComposeActivity extends AppCompatActivity {
     public static final int MAX_TWEET_LENGTH = 140;
     public static final int TWEET_COUNT = 280;
 
-    TextView tweetcount;
+    TextView tweetCount;
     EditText etCompose;
     Button btnTweet;
     TwitterClient client;
@@ -41,31 +41,41 @@ public class ComposeActivity extends AppCompatActivity {
 
         etCompose    = findViewById(R.id.etCompose);
         btnTweet = findViewById(R.id.btnTweet);
-        tweetcount = findViewById(R.id.tweetcount);
+        tweetCount = findViewById(R.id.tweetcounting);
 
 
 
 
-
-
-        tweetcount.addTextChangedListener(new TextWatcher() {
+        tweetCount.addTextChangedListener(new TextWatcher() {
             @Override
+            // Fires right as the text is being changed (even supplies the range of text)
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Fires right as the text is being changed (even supplies the range of text)
-            }
+                tweetCount.setText(String.valueOf(start + 1));
+                if (start > TWEET_COUNT){
+                    btnTweet.setEnabled(false);
+                }
+
+                }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count,
                                           int after) {
+                btnTweet.setEnabled(true);
                 // Fires right before text is changing
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                // Fires right after the text has changed
-                //tvDisplay.setText(s.toString());
+                tweetCount.setText(s.toString().length() + "/280");
+                tweetCount.setText(TWEET_COUNT - s.toString().length()+"");
+                if (TWEET_COUNT-s.toString().length()<0) {
+                    btnTweet.setEnabled(false);
+                }
+
             }
         });
+
+
 
 
         //set click listener on the button
