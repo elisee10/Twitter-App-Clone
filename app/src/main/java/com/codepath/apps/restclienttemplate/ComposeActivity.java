@@ -1,10 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -45,32 +42,32 @@ public class ComposeActivity extends AppCompatActivity {
         tweetCount = findViewById(R.id.tweetcounting);
 
 
-
-        tweetCount.addTextChangedListener(new TextWatcher() {
-            @Override
-            // Fires right as the text is being changed (even supplies the range of text)
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //tweetCount.setText(String.valueOf(start + 1));
-                //if (start > TWEET_COUNT){
-                   // btnTweet.setEnabled(false);
-                }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
-                btnTweet.setEnabled(true);
-                // Fires right before text is changing
-            }
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void afterTextChanged(Editable s) {
-              //  tweetCount.setText(s.toString().length() + "/280");
-                tweetCount.setText(TWEET_COUNT - s.toString().length() + "");
-                if (TWEET_COUNT - s.toString().length() < 0) {
-                    btnTweet.setEnabled(false);
-                }
-            }
-        });
+//Not used
+//        tweetCount.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            // Fires right as the text is being changed (even supplies the range of text)
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                //tweetCount.setText(String.valueOf(start + 1));
+//                //if (start > TWEET_COUNT){
+//                   // btnTweet.setEnabled(false);
+//                }
+//
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count,
+//                                          int after) {
+//                btnTweet.setEnabled(true);
+//                // Fires right before text is changing
+//            }
+//            @SuppressLint("SetTextI18n")
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//              //  tweetCount.setText(s.toString().length() + "/280");
+//                tweetCount.setText(TWEET_COUNT - s.toString().length() + "");
+//                if (TWEET_COUNT - s.toString().length() < 0) {
+//                    btnTweet.setEnabled(false);
+//                }
+//            }
+//        });
 
 
 
